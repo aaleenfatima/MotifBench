@@ -84,12 +84,18 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--pilot", action="store_true",
                     help="MA0001.3 only, 3 replicates")
+    ap.add_argument("--motifs", nargs="+", metavar="ID",
+                    help="motif IDs to generate (default: all SELECTED)")
+    ap.add_argument("--fractions", nargs="+", type=float, metavar="F",
+                    help="strength levels, e.g. 0.6 0.7 0.8 0.9 1.0")
+    ap.add_argument("--reps", type=int, help="replicates per condition")
     args = ap.parse_args()
-    motifs = ["MA0001.3"] if args.pilot else SELECTED
-    reps = 3 if args.pilot else N_REPS
+    motifs = args.motifs or (["MA0001.3"] if args.pilot else SELECTED)
+    fractions = args.fractions or STRENGTH_FRACTIONS
+    reps = args.reps or (3 if args.pilot else N_REPS)
     n = 0
     for mid in motifs:
-        for fr in STRENGTH_FRACTIONS:
+        for fr in fractions:
             for bg in BACKGROUNDS:
                 for r in range(reps):
                     make_dataset(mid, fr, bg, r)

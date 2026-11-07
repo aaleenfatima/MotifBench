@@ -50,7 +50,9 @@ def run_one(task):
     info_path = os.path.join(out, "run.json")
     if os.path.exists(info_path):                  # already done
         with open(info_path) as f:
-            return json.load(f)
+            prev = json.load(f)
+        if prev["status"] != "error":              # errors are retried
+            return prev
     if os.path.isdir(out):
         shutil.rmtree(out)                         # partial run, start clean
     with open(os.path.join(ds_dir, "meta.json")) as f:
@@ -151,6 +153,7 @@ if __name__ == "__main__":
         sys.exit("No datasets found. Generate them first (generate.py / generate_real.py).")
     print(f"{len(dirs)} datasets, {a.workers} workers, STREME args: {' '.join(streme_args)}")
 
+    os.makedirs(RAW, exist_ok=True)               # STREME will not create parents
     done = 0
     t_start = time.perf_counter()
     try:

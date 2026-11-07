@@ -18,3 +18,6 @@ Thumbs.db
 
 # demo / scratch results (real results/*.csv ARE committed)
 results/demo_*
+results/streme_raw/
+results/old/
+results/*.log
