@@ -17,4 +17,4 @@ venv/
 Thumbs.db
 
 # demo / scratch results (real results/*.csv ARE committed)
-results/demo_*.csv
+results/demo_*

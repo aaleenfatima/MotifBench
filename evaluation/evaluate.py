@@ -62,7 +62,15 @@ def _r(x, nd=4):
 
 def evaluate(found, meta, algorithm, bg_model=None, pseudocount=None,
              seed=None, runtime_s=None):
-    """Score one run against the truth in meta.json; returns one CSV row."""
+    """Score one run against the truth in meta.json; returns one CSV row.
+
+    found=None means the method reported no motif (e.g. STREME on a very
+    weak motif): profile metrics are left empty and recovery is 0, so the
+    failure still counts in the averages instead of silently disappearing.
+    """
+    if found is None:
+        return _failed_row(meta, algorithm, bg_model, pseudocount, seed,
+                           runtime_s)
     P = check_profile(found["profile"])
     T = np.asarray(meta["true_matrix"], dtype=float)
     J = np.asarray(meta["jaspar_matrix"], dtype=float)
@@ -94,6 +102,21 @@ def evaluate(found, meta, algorithm, bg_model=None, pseudocount=None,
         runtime_s=runtime_s,
     )
     return {k: _r(row[k]) for k in RESULT_COLUMNS}
+
+
+def _failed_row(meta, algorithm, bg_model, pseudocount, seed, runtime_s):
+    row = dict.fromkeys(RESULT_COLUMNS)                 # everything None
+    row.update(
+        algorithm=algorithm, bg_model=bg_model, pseudocount=pseudocount,
+        seed=seed, dataset=meta["name"],
+        data_type=meta.get("data_type", "synthetic"),
+        motif_id=meta["motif_id"], strength=meta["strength_fraction"],
+        true_ic=_r(meta["true_ic"]), data_bg=meta["background"],
+        replicate=meta["replicate"], true_width=meta["width"],
+        exact_rate=0.0, overlap_rate=0.0, mean_overlap=0.0,
+        runtime_s=runtime_s,
+    )
+    return row
 
 
 def append_results(path, rows):
