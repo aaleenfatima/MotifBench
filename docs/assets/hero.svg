@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="230" viewBox="0 0 900 230">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0f1b2d"/><stop offset="1" stop-color="#16263f"/></linearGradient>
+  <linearGradient id="title" x1="0" x2="1">
+    <stop offset="0" stop-color="#5fa8ff"/><stop offset="0.5" stop-color="#3fe0a8"/>
+    <stop offset="1" stop-color="#ffb347"/></linearGradient>
+</defs>
+<style>
+  .top { animation: up 2.4s ease-in-out infinite; }
+  .bot { animation: down 2.4s ease-in-out infinite; }
+  .rung { stroke: #ffffff; stroke-opacity: .18; stroke-width: 2;
+          transform-box: fill-box; transform-origin: center;
+          animation: squash 2.4s ease-in-out infinite; }
+  @keyframes up   { 0%,100% { transform: translateY(0) }   50% { transform: translateY(140px) } }
+  @keyframes down { 0%,100% { transform: translateY(0) }   50% { transform: translateY(-140px) } }
+  @keyframes squash { 0%,100% { transform: scaleY(1) } 50% { transform: scaleY(-1) } }
+  .nt { font: 700 12px ui-monospace, Menlo, Consolas, monospace; fill: #fff; text-anchor: middle; }
+  .helix { opacity: .38; }
+  .t1 { font: 800 64px 'Segoe UI', Helvetica, Arial, sans-serif; fill: url(#title); text-anchor: middle; }
+  .t2 { font: 500 18px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #9fb3c8; text-anchor: middle; }
+  .glow { animation: pulse 3s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: .85 } 50% { opacity: 1 } }
+</style>
+<rect width="900" height="230" rx="18" fill="url(#bg)"/>
+<g class="helix">
+  <g transform="translate(30.0,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-0.00s"/>
+    <g class="top" style="animation-delay:-0.00s"><circle cx="0" cy="45" r="11" fill="#e34948"/>
+      <text x="0" y="49.5" class="nt">T</text></g>
+    <g class="bot" style="animation-delay:-0.00s"><circle cx="0" cy="185" r="11" fill="#1baf7a"/>
+      <text x="0" y="189.5" class="nt">A</text></g>
+  </g>
+  <g transform="translate(63.6,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-0.16s"/>
+    <g class="top" style="animation-delay:-0.16s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-0.16s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(97.2,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-0.32s"/>
+    <g class="top" style="animation-delay:-0.32s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-0.32s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(130.8,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-0.48s"/>
+    <g class="top" style="animation-delay:-0.48s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-0.48s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(164.4,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-0.64s"/>
+    <g class="top" style="animation-delay:-0.64s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-0.64s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(198.0,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-0.80s"/>
+    <g class="top" style="animation-delay:-0.80s"><circle cx="0" cy="45" r="11" fill="#e34948"/>
+      <text x="0" y="49.5" class="nt">T</text></g>
+    <g class="bot" style="animation-delay:-0.80s"><circle cx="0" cy="185" r="11" fill="#1baf7a"/>
+      <text x="0" y="189.5" class="nt">A</text></g>
+  </g>
+  <g transform="translate(231.6,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-0.96s"/>
+    <g class="top" style="animation-delay:-0.96s"><circle cx="0" cy="45" r="11" fill="#e34948"/>
+      <text x="0" y="49.5" class="nt">T</text></g>
+    <g class="bot" style="animation-delay:-0.96s"><circle cx="0" cy="185" r="11" fill="#1baf7a"/>
+      <text x="0" y="189.5" class="nt">A</text></g>
+  </g>
+  <g transform="translate(265.2,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-1.12s"/>
+    <g class="top" style="animation-delay:-1.12s"><circle cx="0" cy="45" r="11" fill="#eda100"/>
+      <text x="0" y="49.5" class="nt">G</text></g>
+    <g class="bot" style="animation-delay:-1.12s"><circle cx="0" cy="185" r="11" fill="#2a78d6"/>
+      <text x="0" y="189.5" class="nt">C</text></g>
+  </g>
+  <g transform="translate(298.8,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-1.28s"/>
+    <g class="top" style="animation-delay:-1.28s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-1.28s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(332.4,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-1.44s"/>
+    <g class="top" style="animation-delay:-1.44s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-1.44s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(366.0,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-1.60s"/>
+    <g class="top" style="animation-delay:-1.60s"><circle cx="0" cy="45" r="11" fill="#2a78d6"/>
+      <text x="0" y="49.5" class="nt">C</text></g>
+    <g class="bot" style="animation-delay:-1.60s"><circle cx="0" cy="185" r="11" fill="#eda100"/>
+      <text x="0" y="189.5" class="nt">G</text></g>
+  </g>
+  <g transform="translate(399.6,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-1.76s"/>
+    <g class="top" style="animation-delay:-1.76s"><circle cx="0" cy="45" r="11" fill="#2a78d6"/>
+      <text x="0" y="49.5" class="nt">C</text></g>
+    <g class="bot" style="animation-delay:-1.76s"><circle cx="0" cy="185" r="11" fill="#eda100"/>
+      <text x="0" y="189.5" class="nt">G</text></g>
+  </g>
+  <g transform="translate(433.2,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-1.92s"/>
+    <g class="top" style="animation-delay:-1.92s"><circle cx="0" cy="45" r="11" fill="#eda100"/>
+      <text x="0" y="49.5" class="nt">G</text></g>
+    <g class="bot" style="animation-delay:-1.92s"><circle cx="0" cy="185" r="11" fill="#2a78d6"/>
+      <text x="0" y="189.5" class="nt">C</text></g>
+  </g>
+  <g transform="translate(466.8,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-2.08s"/>
+    <g class="top" style="animation-delay:-2.08s"><circle cx="0" cy="45" r="11" fill="#2a78d6"/>
+      <text x="0" y="49.5" class="nt">C</text></g>
+    <g class="bot" style="animation-delay:-2.08s"><circle cx="0" cy="185" r="11" fill="#eda100"/>
+      <text x="0" y="189.5" class="nt">G</text></g>
+  </g>
+  <g transform="translate(500.4,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-2.24s"/>
+    <g class="top" style="animation-delay:-2.24s"><circle cx="0" cy="45" r="11" fill="#2a78d6"/>
+      <text x="0" y="49.5" class="nt">C</text></g>
+    <g class="bot" style="animation-delay:-2.24s"><circle cx="0" cy="185" r="11" fill="#eda100"/>
+      <text x="0" y="189.5" class="nt">G</text></g>
+  </g>
+  <g transform="translate(534.0,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-2.40s"/>
+    <g class="top" style="animation-delay:-2.40s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-2.40s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(567.6,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-2.56s"/>
+    <g class="top" style="animation-delay:-2.56s"><circle cx="0" cy="45" r="11" fill="#eda100"/>
+      <text x="0" y="49.5" class="nt">G</text></g>
+    <g class="bot" style="animation-delay:-2.56s"><circle cx="0" cy="185" r="11" fill="#2a78d6"/>
+      <text x="0" y="189.5" class="nt">C</text></g>
+  </g>
+  <g transform="translate(601.2,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-2.72s"/>
+    <g class="top" style="animation-delay:-2.72s"><circle cx="0" cy="45" r="11" fill="#eda100"/>
+      <text x="0" y="49.5" class="nt">G</text></g>
+    <g class="bot" style="animation-delay:-2.72s"><circle cx="0" cy="185" r="11" fill="#2a78d6"/>
+      <text x="0" y="189.5" class="nt">C</text></g>
+  </g>
+  <g transform="translate(634.8,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-2.88s"/>
+    <g class="top" style="animation-delay:-2.88s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-2.88s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(668.4,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-3.04s"/>
+    <g class="top" style="animation-delay:-3.04s"><circle cx="0" cy="45" r="11" fill="#1baf7a"/>
+      <text x="0" y="49.5" class="nt">A</text></g>
+    <g class="bot" style="animation-delay:-3.04s"><circle cx="0" cy="185" r="11" fill="#e34948"/>
+      <text x="0" y="189.5" class="nt">T</text></g>
+  </g>
+  <g transform="translate(702.0,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-3.20s"/>
+    <g class="top" style="animation-delay:-3.20s"><circle cx="0" cy="45" r="11" fill="#2a78d6"/>
+      <text x="0" y="49.5" class="nt">C</text></g>
+    <g class="bot" style="animation-delay:-3.20s"><circle cx="0" cy="185" r="11" fill="#eda100"/>
+      <text x="0" y="189.5" class="nt">G</text></g>
+  </g>
+  <g transform="translate(735.6,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-3.36s"/>
+    <g class="top" style="animation-delay:-3.36s"><circle cx="0" cy="45" r="11" fill="#2a78d6"/>
+      <text x="0" y="49.5" class="nt">C</text></g>
+    <g class="bot" style="animation-delay:-3.36s"><circle cx="0" cy="185" r="11" fill="#eda100"/>
+      <text x="0" y="189.5" class="nt">G</text></g>
+  </g>
+  <g transform="translate(769.2,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-3.52s"/>
+    <g class="top" style="animation-delay:-3.52s"><circle cx="0" cy="45" r="11" fill="#e34948"/>
+      <text x="0" y="49.5" class="nt">T</text></g>
+    <g class="bot" style="animation-delay:-3.52s"><circle cx="0" cy="185" r="11" fill="#1baf7a"/>
+      <text x="0" y="189.5" class="nt">A</text></g>
+  </g>
+  <g transform="translate(802.8,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-3.68s"/>
+    <g class="top" style="animation-delay:-3.68s"><circle cx="0" cy="45" r="11" fill="#eda100"/>
+      <text x="0" y="49.5" class="nt">G</text></g>
+    <g class="bot" style="animation-delay:-3.68s"><circle cx="0" cy="185" r="11" fill="#2a78d6"/>
+      <text x="0" y="189.5" class="nt">C</text></g>
+  </g>
+  <g transform="translate(836.4,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-3.84s"/>
+    <g class="top" style="animation-delay:-3.84s"><circle cx="0" cy="45" r="11" fill="#2a78d6"/>
+      <text x="0" y="49.5" class="nt">C</text></g>
+    <g class="bot" style="animation-delay:-3.84s"><circle cx="0" cy="185" r="11" fill="#eda100"/>
+      <text x="0" y="189.5" class="nt">G</text></g>
+  </g>
+  <g transform="translate(870.0,0)">
+    <line class="rung" x1="0" y1="45" x2="0" y2="185" style="animation-delay:-4.00s"/>
+    <g class="top" style="animation-delay:-4.00s"><circle cx="0" cy="45" r="11" fill="#2a78d6"/>
+      <text x="0" y="49.5" class="nt">C</text></g>
+    <g class="bot" style="animation-delay:-4.00s"><circle cx="0" cy="185" r="11" fill="#eda100"/>
+      <text x="0" y="189.5" class="nt">G</text></g>
+  </g>
+</g>
+<rect x="190" y="62" width="520" height="110" rx="16" fill="#0f1b2d" fill-opacity=".72"/>
+<text x="450.0" y="128" class="t1 glow">🧬 MotifBench</text>
+<text x="450.0" y="158" class="t2">hide a motif · hunt it down · score the hunters</text>
+</svg>

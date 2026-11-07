@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="852" height="150" viewBox="0 0 852 150">
+<style>
+  .b { font: 700 17px ui-monospace, Menlo, Consolas, monospace; text-anchor: middle; }
+  .win { animation: slide 7.0s linear infinite; }
+  @keyframes slide { 0.0% { transform: translateX(0px) } 5.0% { transform: translateX(36px) } 10.0% { transform: translateX(72px) } 15.0% { transform: translateX(108px) } 20.0% { transform: translateX(144px) } 25.0% { transform: translateX(180px) } 30.0% { transform: translateX(216px) } 35.0% { transform: translateX(252px) } 40.0% { transform: translateX(288px) } 45.0% { transform: translateX(324px) } 50.0% { transform: translateX(360px) } 55.0% { transform: translateX(396px) } 60.0% { transform: translateX(432px) } 65.0% { transform: translateX(468px) } 70.0% { transform: translateX(468px) } 100% { transform: translateX(468px) } }
+  .found { opacity: 0; animation: show 7.0s step-end infinite; }
+  @keyframes show { 0% { opacity: 0 } 70.0% { opacity: 1 } 100% { opacity: 0 } }
+  .score { animation: sc 7.0s steps(1) infinite; }
+  .lbl { font: 600 14px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #9fb3c8; }
+  .yay { font: 800 16px 'Segoe UI', Helvetica, Arial, sans-serif; fill: #3fe0a8; }
+</style>
+<rect width="852" height="150" rx="14" fill="#0f1b2d"/>
+<text x="30" y="32" class="lbl">sliding a 10-letter window along the sequence, scoring every position…</text>
+<text x="39.0" y="78" class="b" fill="#e34948">T</text><text x="57.0" y="78" class="b" fill="#eda100">G</text><text x="75.0" y="78" class="b" fill="#eda100">G</text><text x="93.0" y="78" class="b" fill="#e34948">T</text><text x="111.0" y="78" class="b" fill="#eda100">G</text><text x="129.0" y="78" class="b" fill="#e34948">T</text><text x="147.0" y="78" class="b" fill="#e34948">T</text><text x="165.0" y="78" class="b" fill="#1baf7a">A</text><text x="183.0" y="78" class="b" fill="#1baf7a">A</text><text x="201.0" y="78" class="b" fill="#2a78d6">C</text><text x="219.0" y="78" class="b" fill="#2a78d6">C</text><text x="237.0" y="78" class="b" fill="#e34948">T</text><text x="255.0" y="78" class="b" fill="#e34948">T</text><text x="273.0" y="78" class="b" fill="#1baf7a">A</text><text x="291.0" y="78" class="b" fill="#2a78d6">C</text><text x="309.0" y="78" class="b" fill="#e34948">T</text><text x="327.0" y="78" class="b" fill="#1baf7a">A</text><text x="345.0" y="78" class="b" fill="#e34948">T</text><text x="363.0" y="78" class="b" fill="#1baf7a">A</text><text x="381.0" y="78" class="b" fill="#2a78d6">C</text><text x="399.0" y="78" class="b" fill="#e34948">T</text><text x="417.0" y="78" class="b" fill="#2a78d6">C</text><text x="435.0" y="78" class="b" fill="#2a78d6">C</text><text x="453.0" y="78" class="b" fill="#2a78d6">C</text><text x="471.0" y="78" class="b" fill="#eda100">G</text><text x="489.0" y="78" class="b" fill="#2a78d6">C</text><text x="507.0" y="78" class="b" fill="#2a78d6">C</text><text x="525.0" y="78" class="b" fill="#2a78d6">C</text><text x="543.0" y="78" class="b" fill="#1baf7a">A</text><text x="561.0" y="78" class="b" fill="#e34948">T</text><text x="579.0" y="78" class="b" fill="#1baf7a">A</text><text x="597.0" y="78" class="b" fill="#e34948">T</text><text x="615.0" y="78" class="b" fill="#1baf7a">A</text><text x="633.0" y="78" class="b" fill="#e34948">T</text><text x="651.0" y="78" class="b" fill="#1baf7a">A</text><text x="669.0" y="78" class="b" fill="#eda100">G</text><text x="687.0" y="78" class="b" fill="#eda100">G</text><text x="705.0" y="78" class="b" fill="#eda100">G</text><text x="723.0" y="78" class="b" fill="#2a78d6">C</text><text x="741.0" y="78" class="b" fill="#e34948">T</text><text x="759.0" y="78" class="b" fill="#2a78d6">C</text><text x="777.0" y="78" class="b" fill="#1baf7a">A</text><text x="795.0" y="78" class="b" fill="#e34948">T</text><text x="813.0" y="78" class="b" fill="#1baf7a">A</text>
+<g class="found">
+  <rect x="498" y="58" width="180" height="28" rx="6" fill="#1baf7a"/>
+  <text x="507.0" y="78" class="b" fill="#ffffff">C</text><text x="525.0" y="78" class="b" fill="#ffffff">C</text><text x="543.0" y="78" class="b" fill="#ffffff">A</text><text x="561.0" y="78" class="b" fill="#ffffff">T</text><text x="579.0" y="78" class="b" fill="#ffffff">A</text><text x="597.0" y="78" class="b" fill="#ffffff">T</text><text x="615.0" y="78" class="b" fill="#ffffff">A</text><text x="633.0" y="78" class="b" fill="#ffffff">T</text><text x="651.0" y="78" class="b" fill="#ffffff">A</text><text x="669.0" y="78" class="b" fill="#ffffff">G</text>
+  <text x="822" y="118" class="yay" text-anchor="end">✓ best score: CCATATATAG found at position 26</text>
+</g>
+<g class="win">
+  <rect x="30" y="54" width="180" height="36" rx="8" fill="#5fa8ff" fill-opacity=".16"
+        stroke="#5fa8ff" stroke-width="2.5"/>
+</g>
+</svg>
