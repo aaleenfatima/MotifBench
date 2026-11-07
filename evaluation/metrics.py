@@ -146,3 +146,44 @@ def pearson_aligned(found, true, min_overlap=None):
     if best is None:
         best = dict(r=float("nan"), offset=None, strand=None, overlap=0)
     return best
+
+
+# ---------------------------------------------------------------------------
+# Section 3: site recovery
+# ---------------------------------------------------------------------------
+# "Did the algorithm point at the right place in each sequence?"
+# Two definitions, both reported:
+#   exact   - found start == planted start
+#   overlap - found site covers >= min_frac of the planted site
+# A sequence with no prediction (None, e.g. STREME found no site there)
+# counts as a miss.
+
+def site_overlap(found_pos, true_pos, k_found, k_true):
+    """Fraction of the planted site [true_pos, true_pos+k_true) that the found
+    site [found_pos, found_pos+k_found) covers. 0 if found_pos is None."""
+    if found_pos is None:
+        return 0.0
+    start = max(found_pos, true_pos)
+    stop = min(found_pos + k_found, true_pos + k_true)
+    return max(0, stop - start) / k_true
+
+
+def site_recovery(found_positions, true_positions, k_found, k_true=None,
+                  min_frac=0.5):
+    """Share of sequences whose planted site was recovered.
+
+    found_positions / true_positions: one start index per sequence, same order
+    as the FASTA. Returns exact_rate, overlap_rate, mean_overlap (all 0..1).
+    """
+    if k_true is None:
+        k_true = k_found
+    if len(found_positions) != len(true_positions):
+        raise ValueError("need one found position per sequence")
+    fracs = np.array([site_overlap(f, t, k_found, k_true)
+                      for f, t in zip(found_positions, true_positions)])
+    exact = np.array([f is not None and int(f) == int(t)
+                      for f, t in zip(found_positions, true_positions)])
+    return dict(exact_rate=float(exact.mean()),
+                overlap_rate=float((fracs >= min_frac).mean()),
+                mean_overlap=float(fracs.mean()),
+                n_seqs=len(true_positions))

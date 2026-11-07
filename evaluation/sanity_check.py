@@ -12,7 +12,7 @@ import json, os, sys
 import numpy as np
 from evaluation.metrics import (profile_from_sites, consensus, revcomp_profile,
                                 information_content, hamming_aligned,
-                                pearson_aligned)
+                                pearson_aligned, site_recovery)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SYNTH = os.path.join(ROOT, "data", "synthetic")
@@ -42,6 +42,14 @@ def main(name="MA0001.3_f0.6_uniform_rep0"):
     print("Pearson  sites (rev) vs true  :", pearson_aligned(revcomp_profile(F), T))
     print("Pearson  shifted sites vs true:", pearson_aligned(F[:, 2:], T))
     print("Pearson  RANDOM vs true       :", pearson_aligned(R, T))
+    print()
+    pos, k = m["positions"], m["width"]
+    rng = np.random.default_rng(0)
+    rand_pos = rng.integers(0, m["seq_len"] - k + 1, size=len(pos)).tolist()
+    print("Recovery  true positions      :", site_recovery(pos, pos, k))
+    print("Recovery  all shifted by 2    :", site_recovery([p + 2 for p in pos], pos, k))
+    print("Recovery  all shifted by 6    :", site_recovery([p + 6 for p in pos], pos, k))
+    print("Recovery  RANDOM positions    :", site_recovery(rand_pos, pos, k))
 
 
 if __name__ == "__main__":

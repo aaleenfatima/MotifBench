@@ -4,7 +4,8 @@ import pytest
 from evaluation.metrics import (check_profile, revcomp_str, revcomp_profile,
                                 consensus, profile_from_sites,
                                 column_entropy, information_content,
-                                hamming_aligned, pearson_aligned)
+                                hamming_aligned, pearson_aligned,
+                                site_overlap, site_recovery)
 
 
 # ---- Section 1: core helpers ----------------------------------------------
@@ -124,3 +125,41 @@ def test_pearson_random_motif_is_lower():
 def test_pearson_uniform_gives_nan():
     U = np.full((4, 10), 0.25)
     assert np.isnan(pearson_aligned(U, U)["r"])
+
+
+# ---- Section 3: site recovery ---------------------------------------------
+
+def test_site_overlap():
+    assert site_overlap(100, 100, 10, 10) == 1.0     # same place
+    assert site_overlap(103, 100, 10, 10) == 0.7     # shifted 3 -> 7/10 covered
+    assert site_overlap(106, 100, 10, 10) == 0.4
+    assert site_overlap(200, 100, 10, 10) == 0.0     # nowhere near
+    assert site_overlap(None, 100, 10, 10) == 0.0    # no prediction
+    assert site_overlap(102, 100, 6, 10) == 0.6      # shorter found motif
+
+
+def test_recovery_perfect():
+    r = site_recovery([5, 40, 300], [5, 40, 300], k_found=10)
+    assert r["exact_rate"] == 1.0 and r["overlap_rate"] == 1.0
+    assert r["n_seqs"] == 3
+
+
+def test_recovery_shift_counts_as_overlap_not_exact():
+    r = site_recovery([7, 42, 302], [5, 40, 300], k_found=10)   # all off by 2
+    assert r["exact_rate"] == 0.0
+    assert r["overlap_rate"] == 1.0
+    assert r["mean_overlap"] == pytest.approx(0.8)
+
+
+def test_recovery_mixed():
+    found = [5, 46, 0, None]          # exact, 40% overlap, miss, no prediction
+    true = [5, 40, 300, 100]
+    r = site_recovery(found, true, k_found=10)
+    assert r["exact_rate"] == 0.25
+    assert r["overlap_rate"] == 0.25  # 40% overlap is below the 50% cut
+    assert site_recovery(found, true, 10, min_frac=0.4)["overlap_rate"] == 0.5
+
+
+def test_recovery_length_mismatch_raises():
+    with pytest.raises(ValueError):
+        site_recovery([1, 2], [1, 2, 3], k_found=10)
