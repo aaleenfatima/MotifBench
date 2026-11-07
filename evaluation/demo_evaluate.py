@@ -1,35 +1,46 @@
-"""Run evaluate() on every pilot dataset with three FAKE algorithms, so the
-whole metrics -> CSV path can be checked before the real algorithms exist.
+"""Run evaluate() on every pilot dataset with FAKE algorithms plus the real
+baselines, so metrics -> CSV -> plots can be checked before the real
+algorithms exist.
 
-    oracle  - returns the planted positions (perfect answer)
-    shifted - planted positions + 2 (right motif, slightly off)
-    random  - random positions (a motif finder that failed)
+    greedy / randomized / gibbs  - FAKE: each sequence gets the planted site
+        with a probability that rises with motif strength, otherwise a
+        random one. Pseudocounts on/off and scoring bg uniform/shuffled are
+        varied too. The numbers mean NOTHING about the real algorithms.
+    streme       - FAKE STREME file (true matrix, opposite strand, 8 wide)
+    oracle_scan  - real baseline: scan with the true matrix (ceiling)
+    random       - real baseline: random positions (chance)
 
 Usage (from the repo root):
     python data/generate.py --pilot
     python -m evaluation.demo_evaluate
-Writes results/demo_results.csv (git-ignored). This file is also handy
-pilot data for building the plots in Section 6.
+    python -m evaluation.plots results/demo_results.csv --out results/demo_figures --note "DEMO - FAKE ALGORITHMS, NOT RESULTS"
+Writes results/demo_results.csv (git-ignored).
 """
 import glob, os, sys
 import numpy as np
-from evaluation.metrics import profile_from_sites
+import pandas as pd
+from evaluation.metrics import profile_from_sites, revcomp_profile
 from evaluation.evaluate import load_dataset, evaluate, append_results
+from evaluation.baselines import oracle_scan, random_motif
+from evaluation.streme import write_meme, streme_to_found
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "results", "demo_results.csv")
 
+# fake skill: P(hit planted site) = base + slope * strength
+FAKE_SKILL = {"greedy": (0.0, 0.6), "randomized": (0.05, 0.75), "gibbs": (0.1, 0.85)}
 
-def fake_find_motif(name, seqs, k, true_pos, rng):
-    L = len(seqs[0])
-    if name == "oracle":
-        pos = list(true_pos)
-    elif name == "shifted":
-        pos = [min(p + 2, L - k) for p in true_pos]
-    else:
-        pos = rng.integers(0, L - k + 1, size=len(seqs)).tolist()
+
+def fake_algorithm(alg, seqs, meta, pseudocount, bg_model, rng):
+    k, L = meta["width"], len(seqs[0])
+    base, slope = FAKE_SKILL[alg]
+    p_hit = base + slope * meta["strength_fraction"]
+    p_hit += 0.05 * (pseudocount) + 0.03 * (bg_model == "shuffled")
+    pos = [t if rng.random() < p_hit else int(rng.integers(0, L - k + 1))
+           for t in meta["positions"]]
     sites = [s[p:p + k] for s, p in zip(seqs, pos)]
-    return dict(positions=pos, profile=profile_from_sites(sites, pseudocount=1))
+    return dict(positions=pos,
+                profile=profile_from_sites(sites, pseudocount=1 if pseudocount else 0))
 
 
 def main():
@@ -41,19 +52,26 @@ def main():
     rows = []
     for d in dirs:
         seqs, meta = load_dataset(d)
-        for alg in ("oracle", "shifted", "random"):
-            rng = np.random.default_rng(meta["seed"])
-            found = fake_find_motif(alg, seqs, meta["width"], meta["positions"], rng)
-            rows.append(evaluate(found, meta, algorithm=alg, bg_model="uniform",
-                                 pseudocount=True, seed=0))
+        rng = np.random.default_rng(meta["seed"])
+        for alg in FAKE_SKILL:
+            for pc in (True, False):
+                for bgm in ("uniform", "shuffled"):
+                    f = fake_algorithm(alg, seqs, meta, pc, bgm, rng)
+                    rows.append(evaluate(f, meta, algorithm=alg, bg_model=bgm,
+                                         pseudocount=pc, seed=0))
+        meme = os.path.join(ROOT, "results", "demo_streme", meta["name"], "streme.txt")
+        write_meme(meme, [revcomp_profile(np.array(meta["true_matrix"]))[:, 1:9]])
+        rows.append(evaluate(streme_to_found(meme, seqs), meta, algorithm="streme"))
+        rows.append(evaluate(oracle_scan(seqs, meta), meta, algorithm="oracle_scan"))
+        rows.append(evaluate(random_motif(seqs, meta["width"], meta["seed"]), meta,
+                             algorithm="random"))
     append_results(OUT, rows)
     print(f"wrote {len(rows)} rows to {OUT}\n")
 
-    import pandas as pd
     df = pd.read_csv(OUT)
-    cols = ["hamming", "pearson_true", "exact_rate", "overlap_rate"]
-    print("mean metrics per fake algorithm and motif strength:")
-    print(df.groupby(["algorithm", "strength"])[cols].mean().round(3).to_string())
+    cols = ["pearson_true", "hamming_norm", "overlap_rate", "exact_rate"]
+    print("mean metrics per method (all strengths) - FAKE algorithms:")
+    print(df.groupby("algorithm")[cols].mean().round(3).to_string())
 
 
 if __name__ == "__main__":
