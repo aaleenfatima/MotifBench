@@ -3,7 +3,8 @@ import pytest
 
 from evaluation.metrics import (check_profile, revcomp_str, revcomp_profile,
                                 consensus, profile_from_sites,
-                                column_entropy, information_content)
+                                column_entropy, information_content,
+                                hamming_aligned, pearson_aligned)
 
 
 # ---- Section 1: core helpers ----------------------------------------------
@@ -56,3 +57,70 @@ def test_check_profile_rejects_bad_input():
         check_profile(np.ones((3, 5)) / 3)         # wrong number of rows
     with pytest.raises(ValueError):
         check_profile(np.ones((4, 5)))             # columns don't sum to 1
+
+
+# ---- Section 2: alignment, Hamming, Pearson -------------------------------
+
+TRUE = "GATTACAGGC"
+
+
+def _random_profile(k, seed):
+    P = np.random.default_rng(seed).random((4, k))
+    return P / P.sum(axis=0)
+
+
+def test_hamming_perfect_match():
+    h = hamming_aligned(TRUE, TRUE)
+    assert h["distance"] == 0 and h["offset"] == 0 and h["strand"] == "+"
+
+
+def test_hamming_counts_mismatches():
+    assert hamming_aligned("GATTACAGGA", TRUE)["distance"] == 1
+
+
+def test_hamming_shifted_by_one():
+    # found motif = true shifted right by 1: overlap is perfect, 1 true
+    # position is uncovered -> distance 1, offset 1
+    h = hamming_aligned("ATTACAGGCT", TRUE)
+    assert h["distance"] == 1 and h["offset"] == 1
+
+
+def test_hamming_reverse_strand():
+    h = hamming_aligned(revcomp_str(TRUE), TRUE)
+    assert h["distance"] == 0 and h["strand"] == "-"
+
+
+def test_hamming_shorter_found_motif():
+    # STREME-style: found motif is a shorter piece of the true one
+    h = hamming_aligned("TTACAGGC", TRUE)          # 8 of 10 bases
+    assert h["distance"] == 2 and h["offset"] == 2
+
+
+def test_pearson_perfect_match():
+    T = _random_profile(10, seed=1)
+    p = pearson_aligned(T, T)
+    assert p["r"] == pytest.approx(1.0) and p["offset"] == 0
+
+
+def test_pearson_shifted_match():
+    T = _random_profile(10, seed=1)
+    F = T[:, 2:]                                   # drop first 2 columns
+    p = pearson_aligned(F, T)
+    assert p["r"] == pytest.approx(1.0) and p["offset"] == 2
+
+
+def test_pearson_reverse_strand():
+    T = _random_profile(10, seed=1)
+    p = pearson_aligned(revcomp_profile(T), T)
+    assert p["r"] == pytest.approx(1.0) and p["strand"] == "-"
+
+
+def test_pearson_random_motif_is_lower():
+    T = profile_from_sites([TRUE], pseudocount=0.1)      # strong motif
+    R = _random_profile(10, seed=7)
+    assert pearson_aligned(R, T)["r"] < 0.6
+
+
+def test_pearson_uniform_gives_nan():
+    U = np.full((4, 10), 0.25)
+    assert np.isnan(pearson_aligned(U, U)["r"])

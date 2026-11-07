@@ -73,3 +73,76 @@ def information_content(P):
     true_ic values Laiba stores in meta.json.
     """
     return float((2.0 - column_entropy(P)).sum())
+
+
+# ---------------------------------------------------------------------------
+# Section 2: alignment, Hamming distance, Pearson correlation
+# ---------------------------------------------------------------------------
+# A found motif can be shifted a few bases, on the opposite strand, or (for
+# STREME) a different width from the true motif. So we slide it along the
+# true motif on both strands and keep the best-scoring placement.
+#
+# offset = column of the TRUE motif where column 0 of the found motif lands
+# (negative = found motif starts before the true one). On the "-" strand the
+# offset refers to the reverse-complemented found motif.
+
+def _default_min_overlap(kf, kt):
+    """Need at least 75% of the shorter motif to overlap."""
+    return max(1, int(np.ceil(0.75 * min(kf, kt))))
+
+
+def _placements(kf, kt, min_overlap):
+    """Yield (offset, true_slice, found_slice) for every allowed placement."""
+    for o in range(-(kf - 1), kt):
+        t0, t1 = max(0, o), min(kt, o + kf)
+        if t1 - t0 >= min_overlap:
+            yield o, slice(t0, t1), slice(t0 - o, t1 - o)
+
+
+def hamming_aligned(found, true, min_overlap=None):
+    """Smallest Hamming distance between two consensus strings over all shifts
+    and both strands.
+
+    distance = mismatches in the overlap + true positions left uncovered,
+    so it ranges from 0 (perfect) to len(true). A shifted-but-correct motif
+    is not punished for the shift itself, only for what it misses.
+    """
+    found, true = found.upper(), true.upper()
+    kf, kt = len(found), len(true)
+    if min_overlap is None:
+        min_overlap = _default_min_overlap(kf, kt)
+    best = None
+    for strand, f in (("+", found), ("-", revcomp_str(found))):
+        for o, ts, fs in _placements(kf, kt, min_overlap):
+            mism = sum(a != b for a, b in zip(true[ts], f[fs]))
+            d = mism + (kt - (ts.stop - ts.start))
+            if best is None or d < best["distance"]:
+                best = dict(distance=d, normalized=d / kt,
+                            offset=o, strand=strand)
+    return best
+
+
+def pearson_aligned(found, true, min_overlap=None):
+    """Best Pearson correlation between two profiles over all shifts and both
+    strands.
+
+    For each placement the overlapping columns of both matrices are
+    flattened into vectors and correlated. 1 = identical shape, ~0 = unrelated.
+    """
+    F, T = check_profile(found), check_profile(true)
+    kf, kt = F.shape[1], T.shape[1]
+    if min_overlap is None:
+        min_overlap = _default_min_overlap(kf, kt)
+    best = None
+    for strand, G in (("+", F), ("-", revcomp_profile(F))):
+        for o, ts, fs in _placements(kf, kt, min_overlap):
+            x, y = G[:, fs].ravel(), T[:, ts].ravel()
+            if x.std() == 0 or y.std() == 0:   # e.g. all-uniform columns
+                continue
+            r = float(np.corrcoef(x, y)[0, 1])
+            if best is None or r > best["r"]:
+                best = dict(r=r, offset=o, strand=strand,
+                            overlap=ts.stop - ts.start)
+    if best is None:
+        best = dict(r=float("nan"), offset=None, strand=None, overlap=0)
+    return best
