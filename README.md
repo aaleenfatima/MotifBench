@@ -165,10 +165,10 @@ We make motifs harder to find by blending them with random noise, `P' = (1−α)
 
 ```text
 MotifBench/
-├── 🧬 data/            JASPAR download, strength control, dataset generators        (Laiba)
-├── 🔎 algorithms/      Greedy, Randomized, Gibbs + pseudocount/background switches  (Aaleen)
-├── 📏 evaluation/      metrics, STREME conversion, plots, statistics                (Mariyam)
-├── ⚙️ experiments/     the runner that loops over the whole grid                    (Laiba)
+├── 🧬 data/            JASPAR download, strength control, dataset generators      
+├── 🔎 algorithms/      Greedy, Randomized, Gibbs + pseudocount/background switches  
+├── 📏 evaluation/      metrics, STREME conversion, plots, statistics                
+├── ⚙️ experiments/     the runner that loops over the whole grid                    
 ├── 📓 notebooks/       exploration
 ├── 📊 results/         results CSVs and figures (demo_* is git-ignored)
 ├── 🎨 docs/            README graphics + the script that draws them
