@@ -118,3 +118,18 @@ def test_invalid_input_raises(name):
         f(["ACGT"], 3)                    # fewer than 2 sequences
     with pytest.raises(ValueError):
         f(["ACGT", "ACGT"], 3, background="bogus")
+
+def test_textbook_greedy_example():
+    """Sample dataset from Compeau & Pevzner (Greedy Motif Search, k=3, t=5).
+    Expected motifs are the book's answers: without pseudocounts
+    CAG CAG CAA CAA CAA, with pseudocounts TTC ATC TTC ATC TTC.
+    (Matches an independent textbook-style implementation with the
+    consensus-mismatch score; verify against your copy of the book.)"""
+    dna = ["GGCGTTCAGGCA", "AAGAATCAGTCA", "CAAGGAGTTCGC",
+           "CACGTCAATCAC", "CAATAATATTCG"]
+    expected = {False: ["CAG", "CAG", "CAA", "CAA", "CAA"],
+                True: ["TTC", "ATC", "TTC", "ATC", "TTC"]}
+    for pc, motifs in expected.items():
+        out = ALGORITHMS["greedy"](dna, 3, pseudocount=pc)
+        found = [dna[i][p:p + 3] for i, p in enumerate(out["positions"])]
+        assert found == motifs

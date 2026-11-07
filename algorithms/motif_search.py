@@ -230,6 +230,15 @@ def gibbs_sampler(seqs, k, background="uniform", pseudocount=True, seed=0,
     return _result(data, best_pos, pseudocount, log_bg)
 
 
+def score_positions(seqs, k, positions, background="uniform", pseudocount=True, seed=0):
+    """Log-odds score (same definition as the algorithms use) of a GIVEN set of
+    start positions, e.g. the planted ones. Comparing it with the score of a
+    found motif tells whether a miss was a search failure (found < planted)
+    or a scoring-model failure (found >= planted)."""
+    data, log_bg, _ = _prepare(seqs, k, background, pseudocount, seed)
+    return _result(data, np.asarray(positions, dtype=np.intp), pseudocount, log_bg)["score"]
+
+
 ALGORITHMS = {
     "greedy": greedy_motif_search,
     "randomized": randomized_motif_search,
