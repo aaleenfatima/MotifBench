@@ -41,7 +41,7 @@ DEFAULT_STREME = os.path.join(ROOT, "results", "streme_raw")
 BUDGET = {
     "greedy": {},
     "randomized": {"n_restarts": 200},
-    "gibbs": {"n_restarts": 20, "n_iterations": 1000},
+    "gibbs": {"n_restarts": 40, "n_iterations": 2000},
 }
 BG_MODELS = ("uniform", "shuffled")
 PSEUDOCOUNTS = (True, False)
@@ -160,6 +160,8 @@ def main():
     ap.add_argument("--roots", nargs="+", default=DEFAULT_ROOTS)
     ap.add_argument("--filter", default="", help="only dataset names containing this")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--reps", nargs="+", type=int,
+                    help="only these replicate numbers, e.g. --reps 0 1 2 3 4")
     ap.add_argument("--workers", type=int,
                     default=max(1, (os.cpu_count() or 2) // 2))
     ap.add_argument("--out", default=DEFAULT_OUT)
@@ -173,6 +175,9 @@ def main():
         dirs += [os.path.dirname(p) for p in
                  sorted(glob.glob(os.path.join(root, "*", "meta.json")))]
     dirs = [d for d in dirs if a.filter in os.path.basename(d)]
+    if a.reps:
+        dirs = [d for d in dirs
+                if int(os.path.basename(d).rsplit("rep", 1)[1]) in a.reps]
     if a.limit:
         dirs = dirs[:a.limit]
     if not dirs:

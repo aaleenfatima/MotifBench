@@ -120,7 +120,11 @@ def _prepare(seqs, k, background, pseudocount, seed):
     if min(len(c) for c in codes) < k:
         raise ValueError("every sequence must be at least k long")
     rng = np.random.default_rng(seed)
-    log_bg = np.log(_background(codes, background, rng))
+    # The background estimate gets its own generator, so 'uniform' and
+    # 'shuffled' runs of the same seed start the search from identical random
+    # numbers (a paired comparison) instead of shifted ones.
+    bg_rng = np.random.default_rng([seed, 1])
+    log_bg = np.log(_background(codes, background, bg_rng))
     return _Data(codes, k), log_bg, rng
 
 
