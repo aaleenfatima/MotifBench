@@ -53,9 +53,43 @@ def test_summary_table_one_row_per_condition(tmp_path):
     assert "overlap_rate_mean" in t and "overlap_rate_ci95" in t
 
 
+def _with_real(tmp_path):
+    """The fake results plus real-site rows at strength 1.0 with an absurd
+    metric value, so leaking into the synthetic curves would be obvious."""
+    df = pd.read_csv(_fake_results(tmp_path))
+    real = df[df["strength"] == 1.0].copy()
+    real["data_type"] = "real_sites"
+    real["dataset"] = "real_" + real["dataset"].astype(str)
+    real["motif_id"] = "MA0003.4"
+    for m in ("pearson_true", "hamming_norm", "overlap_rate", "exact_rate"):
+        real[m] = 0.999
+    df["data_type"] = "synthetic"
+    path = tmp_path / "with_real.csv"
+    pd.concat([df, real]).to_csv(path, index=False)
+    return path
+
+
+def test_found_entropy_is_per_position(tmp_path):
+    pd.DataFrame(dict(found_ic=[0.0, 20.0], found_width=[10, 10],
+                      pseudocount=[True, False], bg_model=["a", "b"],
+                      data_type=["synthetic", "synthetic"])
+                 ).to_csv(tmp_path / "x.csv", index=False)
+    out = load_results(tmp_path / "x.csv")
+    assert list(out["found_entropy"]) == [2.0, 0.0]   # noise, fully specific
+
+
+def test_real_rows_kept_out_of_strength_summary(tmp_path):
+    df = load_results(_with_real(tmp_path))
+    t = summary_table(df)
+    syn = t[(t["data_type"] == "synthetic") & (t["strength"] == 1.0)]
+    assert (syn["overlap_rate_mean"] < 0.999).all()
+    assert (t["data_type"] == "real_sites").any()
+
+
 def test_make_all_writes_every_figure(tmp_path):
-    paths = make_all([_fake_results(tmp_path)], tmp_path / "figs")
-    assert len(paths) == len(METRICS) + 1
+    paths = make_all([_with_real(tmp_path)], tmp_path / "figs")
+    assert len(paths) == len(METRICS) + 2          # + real_data.png + table
+    assert any(p.endswith("real_data.png") for p in paths)
     for p in paths:
         assert (tmp_path / "figs" / p.split("figs")[-1].lstrip("\\/")).stat().st_size > 0
 

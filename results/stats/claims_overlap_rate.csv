@@ -1,0 +1,16 @@
+claim,metric,n,mean_a,mean_b,mean_diff,median_diff,wins,losses,ties,stat,p,effect_r,p_holm,significant
+greedy: pseudocounts on > off,overlap_rate,3360,0.0555,0.3648,0.3093,0.12,2147,412,801,174415.0,0.0,0.8935,0.0,True
+randomized: pseudocounts on > off,overlap_rate,3360,0.2362,0.3369,0.1007,0.02,1838,425,1097,225523.0,0.0,0.8239,0.0,True
+gibbs: pseudocounts on > off,overlap_rate,3360,0.1982,0.3372,0.139,0.02,1913,427,1020,233437.5,0.0,0.8295,0.0,True
+greedy: shuffled bg > uniform bg  [at_rich DNA],overlap_rate,1120,0.0523,0.3171,0.2648,0.08,796,55,269,6259.0,0.0,0.9655,0.0,True
+greedy: shuffled bg > uniform bg  [markov DNA],overlap_rate,1120,0.15,0.2365,0.0865,0.02,601,195,324,57623.0,0.0,0.6367,0.0,True
+greedy: shuffled bg > uniform bg  [uniform DNA],overlap_rate,1120,0.2551,0.25,-0.005,0.0,204,230,686,42250.0,0.0582,-0.1048,0.1165,False
+randomized: shuffled bg > uniform bg  [at_rich DNA],overlap_rate,1120,0.0019,0.5519,0.55,0.64,1053,17,50,832.5,0.0,0.9971,0.0,True
+randomized: shuffled bg > uniform bg  [markov DNA],overlap_rate,1120,0.0422,0.3596,0.3174,0.1,831,107,182,17956.0,0.0,0.9185,0.0,True
+randomized: shuffled bg > uniform bg  [uniform DNA],overlap_rate,1120,0.385,0.3788,-0.0063,0.0,376,397,347,143389.5,0.3188,-0.0414,0.3188,False
+gibbs: shuffled bg > uniform bg  [at_rich DNA],overlap_rate,1120,0.0017,0.4904,0.4887,0.54,1006,13,101,686.0,0.0,0.9974,0.0,True
+gibbs: shuffled bg > uniform bg  [markov DNA],overlap_rate,1120,0.0316,0.3274,0.2958,0.06,766,113,241,18886.5,0.0,0.9023,0.0,True
+gibbs: shuffled bg > uniform bg  [uniform DNA],overlap_rate,1120,0.385,0.3703,-0.0147,0.0,409,492,219,170562.0,0.0,-0.1605,0.0001,True
+"greedy (pc on, shuffled) vs STREME",overlap_rate,1680,0.3771,0.463,0.0859,0.02,922,499,259,286941.0,0.0,0.432,0.0,True
+"randomized (pc on, shuffled) vs STREME",overlap_rate,1680,0.3771,0.5016,0.1245,0.04,1088,311,281,146769.0,0.0,0.7003,0.0,True
+"gibbs (pc on, shuffled) vs STREME",overlap_rate,1680,0.3771,0.5031,0.126,0.04,1056,328,296,141574.5,0.0,0.7046,0.0,True

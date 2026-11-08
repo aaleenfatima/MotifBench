@@ -1,0 +1,4 @@
+algorithm,metric,streme,plain,best,gap_plain,gap_best,fraction_closed
+greedy,overlap_rate,0.8022,0.0351,0.786,0.7671,0.0162,0.9789
+randomized,overlap_rate,0.8022,0.1918,0.876,0.6104,-0.0738,1.1209
+gibbs,overlap_rate,0.8022,0.1784,0.8811,0.6238,-0.0789,1.1265

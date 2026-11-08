@@ -10,10 +10,12 @@ We hide transcription-factor binding motifs inside DNA, then let **Greedy**, **R
 ![NumPy](https://img.shields.io/badge/numpy-vectorised-013243?logo=numpy&logoColor=white)
 ![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
 ![Motifs](https://img.shields.io/badge/motifs-JASPAR-8A2BE2)
-![Status](https://img.shields.io/badge/status-in%20progress-orange)
+![Runs](https://img.shields.io/badge/runs-26%2C550-1baf7a)
+![Status](https://img.shields.io/badge/status-results%20in-1baf7a)
 
 [🚀 Quick start](#-quick-start-60-seconds) ·
 [🗺️ How it works](#️-how-it-works) ·
+[🏆 Results](#-results) ·
 [📏 Metrics](#-how-we-score-a-motif) ·
 [📊 Plots & stats](#-plots--statistics) ·
 [👩‍💻 Team](#-who-built-what) ·
@@ -242,11 +244,54 @@ STREME picks its own width, may report the opposite strand and ranks several mot
 
 ---
 
+## 🏆 Results
+
+**26,550 runs** · 8 JASPAR motifs · 7 strengths · 3 DNA backgrounds · 10 replicates · 1,680 synthetic + 90 real-site datasets · ~43 CPU-hours
+
+<p align="center">
+  <img src="results/figures/overlap_rate_vs_strength.png" alt="Site recovery vs motif strength for every algorithm, pseudocount setting and background, with STREME, the true-motif ceiling and chance for reference" width="100%">
+</p>
+
+| | Finding | Evidence (synthetic, paired Wilcoxon, Holm-corrected) |
+|:-:|---|---|
+| 🌍 | **The background model is the biggest single factor.** On AT-rich DNA, scoring with a uniform background makes Randomized and Gibbs find almost nothing; a shuffled background rescues them. | Randomized **+0.55**, Gibbs **+0.49** site recovery on AT-rich DNA (p < 1e-160). No effect on uniform DNA, as it should be. |
+| ➕ | **Pseudocounts help every algorithm, and save Greedy.** Without them Greedy collapses. | Greedy **+0.31**, Gibbs +0.14, Randomized +0.10 (all p < 1e-250) |
+| 🏁 | **Both fixes together close the whole gap to STREME, and pass it.** | Recovery: textbook settings 4–11 % → both fixes ≈ 50 % vs STREME 38 % |
+| 🧬 | **The pattern holds on real JASPAR binding sites.** | Gibbs 0.88, Randomized 0.88, Greedy 0.79 vs STREME 0.80 |
+| 🔍 | **At weak strengths, found motifs are *more* specific than the true motif**: the searches lock onto chance patterns that only look conserved. | Entropy ≈ 1.1–1.5 bits/position found vs ≈ 1.8 for the true motif at 20 % strength |
+
+> ⚠️ **Fair-comparison caveat:** the classic algorithms were told the true motif width; STREME had to discover it (`algorithms_know_true_width` in [`results/run_config.json`](results/run_config.json)). "Beats STREME" holds under that condition.
+
+<details>
+<summary><b>📈 All figures</b></summary>
+
+<br>
+
+| Metric | Figure |
+|---|---|
+| Pearson r with the true motif | [pearson_true_vs_strength.png](results/figures/pearson_true_vs_strength.png) |
+| Hamming distance | [hamming_norm_vs_strength.png](results/figures/hamming_norm_vs_strength.png) |
+| Site recovery (≥ 50 % overlap) | [overlap_rate_vs_strength.png](results/figures/overlap_rate_vs_strength.png) |
+| Site recovery (exact start) | [exact_rate_vs_strength.png](results/figures/exact_rate_vs_strength.png) |
+| Entropy of the found profile | [found_entropy_vs_strength.png](results/figures/found_entropy_vs_strength.png) |
+| Real binding sites, all metrics | [real_data.png](results/figures/real_data.png) |
+| Every number behind the figures | [summary_table.csv](results/figures/summary_table.csv) |
+| Every statistical test | [results/stats/](results/stats/) |
+
+<p align="center">
+  <img src="results/figures/real_data.png" alt="Real binding-site results: one dot per method on site recovery, Pearson r, Hamming distance and entropy" width="100%">
+</p>
+
+</details>
+
+---
+
 ## 📊 Plots & statistics
 
 ```bash
-python -m evaluation.plots results/results.csv          # -> results/figures/*.png + summary_table.csv
-python -m evaluation.stats results/results.csv          # -> results/stats/*.csv + plain-English summary
+python -m evaluation.plots results/results.csv                          # -> results/figures/*.png + summary_table.csv
+python -m evaluation.stats results/results.csv                          # -> results/stats/*.csv (synthetic)
+python -m evaluation.stats results/results.csv --data-type real_sites   # -> results/stats/real_sites/*.csv
 ```
 
 **Reading a figure.** One panel per *data background × scoring background*:
@@ -277,9 +322,11 @@ python -m evaluation.stats results/results.csv          # -> results/stats/*.csv
 - [x] Real-site datasets (JASPAR sites in synthetic flanks)
 - [x] Greedy · Randomized · Gibbs with both switches
 - [x] Metrics, STREME conversion, plots, statistical tests
-- [ ] STREME runs (MEME Suite on Linux / WSL)
-- [ ] Experiment runner over the full grid
-- [ ] Full runs → figures → report & slides
+- [x] STREME runs (MEME Suite, default settings)
+- [x] Experiment runner over the full grid: 26,550 runs
+- [x] Final figures and statistics from the full results
+- [ ] Analysis notebook
+- [ ] Report & slides
 
 ---
 

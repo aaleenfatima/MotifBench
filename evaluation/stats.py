@@ -3,6 +3,7 @@
 Usage (from the repo root):
     python -m evaluation.stats results/results.csv
     python -m evaluation.stats results/results.csv --metric pearson_true --out results/stats
+    python -m evaluation.stats results/results.csv --data-type real_sites
 
 Why PAIRED tests: every configuration runs on the same datasets, so we
 compare A and B dataset-by-dataset ("on this exact dataset, did pseudocounts
@@ -160,10 +161,11 @@ def reliability(df, metric="overlap_rate", level=0.8):
 
 def _sentence(row):
     p = row["p_holm"]
+    p_txt = "<1e-300" if p == 0 else f"{p:.2g}"   # below float precision
     verdict = "SIGNIFICANT" if row["significant"] else "not significant"
     return (f"  {row['claim']:<52} diff {row['mean_diff']:+.3f}  "
-            f"(wins {row['wins']}/{row['n']})  r={row['effect_r']:+.2f}  "
-            f"p_holm={p:.2g}  -> {verdict}")
+            f"(wins {row['wins']}/{row['n']}, ties {row['ties']})  "
+            f"r={row['effect_r']:+.2f}  p_holm={p_txt}  -> {verdict}")
 
 
 def main():
@@ -171,8 +173,14 @@ def main():
     ap.add_argument("csv", nargs="+")
     ap.add_argument("--metric", default="overlap_rate")
     ap.add_argument("--out", default=os.path.join("results", "stats"))
+    ap.add_argument("--data-type", default="synthetic",
+                    choices=["synthetic", "real_sites"],
+                    help="test synthetic and real-site data separately")
     a = ap.parse_args()
     df = load_results(*a.csv)
+    df = df[df["data_type"] == a.data_type]
+    if a.data_type != "synthetic":
+        a.out = os.path.join(a.out, a.data_type)
 
     claims = standard_claims(df, a.metric)
     gap = streme_gap(df, a.metric)
@@ -182,15 +190,20 @@ def main():
     gap.round(4).to_csv(os.path.join(a.out, f"streme_gap_{a.metric}.csv"), index=False)
     rel.to_csv(os.path.join(a.out, f"reliability_{a.metric}.csv"), index=False)
 
-    print(f"\nPaired Wilcoxon tests on {a.metric} (Holm-corrected):\n")
+    print(f"\nPaired Wilcoxon tests on {a.metric}, {a.data_type} data "
+          f"({df['dataset'].nunique()} datasets, Holm-corrected):\n")
     for _, row in claims.iterrows():
         print(_sentence(row))
     if len(gap):
         print("\nGap to STREME closed by pseudocounts + shuffled background:\n")
         for _, g in gap.iterrows():
-            what = ("already at or above STREME - no gap to close"
-                    if g["gap_plain"] <= 0 else
-                    f"{g['fraction_closed']:.0%} of the gap closed")
+            if g["gap_plain"] <= 0:
+                what = "already at or above STREME - no gap to close"
+            elif g["fraction_closed"] > 1:
+                what = (f"whole gap closed, then overtakes STREME by "
+                        f"{g['best'] - g['streme']:+.3f}")
+            else:
+                what = f"{g['fraction_closed']:.0%} of the gap closed"
             print(f"  {g['algorithm']:<11} plain {g['plain']:.3f} -> best {g['best']:.3f}"
                   f"  (STREME {g['streme']:.3f}): {what}")
     print(f"\nwrote CSVs to {a.out}")
