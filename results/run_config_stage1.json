@@ -1,0 +1,25 @@
+{
+  "budget": {
+    "greedy": {},
+    "randomized": {
+      "n_restarts": 200
+    },
+    "gibbs": {
+      "n_restarts": 40,
+      "n_iterations": 2000
+    }
+  },
+  "bg_models": [
+    "uniform",
+    "shuffled"
+  ],
+  "pseudocounts": [
+    true,
+    false
+  ],
+  "seed_rule": "meta['seed'] % 2**31, same for every setting",
+  "algorithms_know_true_width": true,
+  "numpy": "2.5.4",
+  "python": "3.14.8",
+  "git_commit": "014f825"
+}
