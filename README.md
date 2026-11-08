@@ -11,7 +11,7 @@ We hide transcription-factor binding motifs inside DNA, then let **Greedy**, **R
 ![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
 ![Motifs](https://img.shields.io/badge/motifs-JASPAR-8A2BE2)
 ![Runs](https://img.shields.io/badge/runs-26%2C550-1baf7a)
-![Status](https://img.shields.io/badge/status-results%20in-1baf7a)
+![Status](https://img.shields.io/badge/status-complete-1baf7a)
 
 [🚀 Quick start](#-quick-start-60-seconds) ·
 [🗺️ How it works](#️-how-it-works) ·
@@ -171,8 +171,9 @@ MotifBench/
 ├── 🔎 algorithms/      Greedy, Randomized, Gibbs + pseudocount/background switches  
 ├── 📏 evaluation/      metrics, STREME conversion, plots, statistics                
 ├── ⚙️ experiments/     the runner that loops over the whole grid                    
-├── 📓 notebooks/       exploration
+├── 📓 notebooks/       MotifBench_analysis.ipynb: the full analysis, start to finish
 ├── 📊 results/         results CSVs and figures (demo_* is git-ignored)
+├── 📄 report/          final report (Word + PDF) and presentation slides
 ├── 🎨 docs/            README graphics + the script that draws them
 └── requirements.txt
 ```
@@ -260,6 +261,8 @@ STREME picks its own width, may report the opposite strand and ranks several mot
 | 🧬 | **The pattern holds on real JASPAR binding sites.** | Gibbs 0.88, Randomized 0.88, Greedy 0.79 vs STREME 0.80 |
 | 🔍 | **At weak strengths, found motifs are *more* specific than the true motif**: the searches lock onto chance patterns that only look conserved. | Entropy ≈ 1.1–1.5 bits/position found vs ≈ 1.8 for the true motif at 20 % strength |
 
+> 📓 **The whole analysis in one place:** [`notebooks/MotifBench_analysis.ipynb`](notebooks/MotifBench_analysis.ipynb) rebuilds every figure, table and test above from `results/results.csv`, with the conclusions at the end. GitHub shows it with all outputs; to re-run it, open it in VS Code and click **Run All**.
+
 > ⚠️ **Fair-comparison caveat:** the classic algorithms were told the true motif width; STREME had to discover it (`algorithms_know_true_width` in [`results/run_config.json`](results/run_config.json)). "Beats STREME" holds under that condition.
 
 <details>
@@ -325,8 +328,8 @@ python -m evaluation.stats results/results.csv --data-type real_sites   # -> res
 - [x] STREME runs (MEME Suite, default settings)
 - [x] Experiment runner over the full grid: 26,550 runs
 - [x] Final figures and statistics from the full results
-- [ ] Analysis notebook
-- [ ] Report & slides
+- [x] Analysis notebook: every figure, table and test in one place
+- [x] Final report ([Word](report/MotifBench_Report.docx) · [PDF](report/MotifBench_Report.pdf)) and [presentation](report/MotifBench_Presentation.pptx)
 
 ---
 
