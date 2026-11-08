@@ -19,7 +19,8 @@ We hide transcription-factor binding motifs inside DNA, then let **Greedy**, **R
 [📏 Metrics](#-how-we-score-a-motif) ·
 [📊 Plots & stats](#-plots--statistics) ·
 [👩‍💻 Team](#-who-built-what) ·
-[❓ FAQ](#-faq--fun-facts)
+[❓ FAQ](#-faq--fun-facts) ·
+[📚 Study guide](docs/STUDY_GUIDE.md)
 
 </div>
 
@@ -174,7 +175,7 @@ MotifBench/
 ├── 📓 notebooks/       MotifBench_analysis.ipynb: the full analysis, start to finish
 ├── 📊 results/         results CSVs and figures (demo_* is git-ignored)
 ├── 📄 report/          final report (Word + PDF) and presentation slides
-├── 🎨 docs/            README graphics + the script that draws them
+├── 🎨 docs/            STUDY_GUIDE.md, README graphics + the script that draws them
 └── requirements.txt
 ```
 

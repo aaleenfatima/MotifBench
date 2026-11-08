@@ -5,4 +5,9 @@ pandas>=2.0
 biopython>=1.83
 scipy>=1.11
 matplotlib>=3.8
+requests>=2.31          # data/jaspar_download.py
 pytest>=8.0
+# notebooks/MotifBench_analysis.ipynb (ipykernel runs it in VS Code/Jupyter,
+# nbclient re-executes it from the command line)
+ipykernel>=6.0
+nbclient>=0.10
